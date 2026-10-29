@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     flex:1,justifyContent:'center', alignItems:'center'
    },
    button:{
-    backgroundColor:'#0D1E2A'
+    backgroundColor:'#0D1E2A', padding:15, borderRadius:10
    },
    text:{
     color:'#fff', fontWeight:'bold'
