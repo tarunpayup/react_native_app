@@ -1,26 +1,42 @@
-import { Alert, StyleSheet, Text, TouchableHighlight, View } from 'react-native';
+import { FlatList, StyleSheet, Text, View } from 'react-native';
+
+const FLATLIST_DATA = [
+  {
+    id:'1', name:'Mango'
+  },
+  {
+    id:'2', name:'Apple'
+  },{
+
+    id:'3', name:'Pineapple'
+  }
+];
 
 export default function Index(){
   return(
-    <View style={styles.container}>
-      <TouchableHighlight
-        style = {styles.button}
-        onPress={()=> Alert.alert('Button Pressed')}
-      >
-        <Text style={styles.text}>Tap me</Text>
-      </TouchableHighlight>
+    <View>
+      <FlatList
+        data={FLATLIST_DATA}
+        keyExtractor={(flatlist_item)=> flatlist_item.id}
+        renderItem={({item}) => (
+          <View>
+            <Text>{item.name}</Text>
+          </View>
+        )
+        }
+      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-   container:{
-    flex:1,justifyContent:'center', alignItems:'center'
-   },
-   button:{
-    backgroundColor:'#0D1E2A', padding:15, borderRadius:10
-   },
-   text:{
-    color:'#fff', fontWeight:'bold'
-   }
+  container:{
+    flex:1, backgroundColor:'#fff', margin:10
+  },
+  row:{
+    padding:15, borderBottomWidth:1
+  },
+  text:{
+    fontSize:16
+  }
 });
