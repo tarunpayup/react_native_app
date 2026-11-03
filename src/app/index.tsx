@@ -1,42 +1,40 @@
-import { FlatList, StyleSheet, Text, View } from 'react-native';
-
-const FLATLIST_DATA = [
-  {
-    id:'1', name:'Mango'
-  },
-  {
-    id:'2', name:'Apple'
-  },{
-
-    id:'3', name:'Pineapple'
-  }
-];
+import { useRouter } from 'expo-router';
+import * as SplashScreen from 'expo-splash-screen';
+import { useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 export default function Index(){
+
+  const router = useRouter();
+
+  useEffect(()=>{
+    async function run(){
+      await SplashScreen.hideAsync();
+      setTimeout(
+        ()=>{
+          router.replace('/login');
+        },2000
+      );
+    }
+    run();
+  }
+  );
+
   return(
-    <View>
-      <FlatList
-        data={FLATLIST_DATA}
-        keyExtractor={(flatlist_item)=> flatlist_item.id}
-        renderItem={({item}) => (
-          <View>
-            <Text>{item.name}</Text>
-          </View>
-        )
-        }
-      />
+    <View style={styles.container}>
+      <Text style={styles.title}>My App</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container:{
-    flex:1, backgroundColor:'#fff', margin:10
+    flex:1,
+    backgroundColor:"#fff",
+    justifyContent:'center',
+    alignItems:'center'
   },
-  row:{
-    padding:15, borderBottomWidth:1
-  },
-  text:{
-    fontSize:16
+  title:{
+    color:'#000'
   }
 });
