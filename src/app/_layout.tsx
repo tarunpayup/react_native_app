@@ -1,21 +1,25 @@
+import { Provider } from '@react-native-material/core';
 import { DarkTheme, DefaultTheme, Stack, ThemeProvider } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
+import type { ComponentType, PropsWithChildren } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-//App tabs
+
 SplashScreen.preventAutoHideAsync();
+const MaterialProvider = Provider as unknown as ComponentType<PropsWithChildren>;
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <Stack>
-        <Stack.Screen name="index" options={{ title: 'Home' }} />
-        <Stack.Screen name="login" options={{ title: 'Login' }} />
-        <Stack.Screen name="signup" options={{ title: 'Singup' }} />
+      <MaterialProvider>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="login" />
+        <Stack.Screen name="signup" />
+        <Stack.Screen name="dashboard" />
       </Stack>
+      </MaterialProvider>
     </ThemeProvider>
   );
 }
