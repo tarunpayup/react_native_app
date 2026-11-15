@@ -3,12 +3,12 @@ import { useState } from 'react';
 import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 
-type ItemRowProps = {
+type ItemRowP = {
   text: String,
   onRemove: ()=> void;
 }
 
-function ItemRow({text, onRemove}:ItemRowProps){
+function ItemRow({text, onRemove}:ItemRowP){
   return(
     <View style={styles.row}>
       <Text style={styles.rowText}>- {text}</Text>
