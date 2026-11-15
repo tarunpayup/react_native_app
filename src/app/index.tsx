@@ -1,48 +1,88 @@
-import { Text } from '@react-native-material/core';
 import { useRouter } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import { Image, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { FlatList, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-export default function Index() {
+
+type ItemRowProps = {
+  text: String,
+  onRemove: ()=> void;
+}
+
+function ItemRow({text, onRemove}:ItemRowProps){
+  return(
+    <View style={styles.row}>
+      <Text style={styles.rowText}>- {text}</Text>
+      <Pressable onPress={onRemove}>
+        <Text style={styles.removeText}>Remove</Text>
+      </Pressable>
+    </View>
+  );
+}
+
+export default function HomeScreen(){
+  const [item, setItem] = useState('');
+  const [items,setItems] = useState<string[]>([]);
   const router = useRouter();
 
-  useEffect(() => {
-    async function run() {
-      await SplashScreen.hideAsync(); 
-      setTimeout(() => {
-        router.replace('/login');
-      }, 2000); 
-    }
-    run();
-  }, []);
+  const addItem = () => {
+    if(item.trim() === '') return;
+    setItems([...items,item]);
+    setItem('');
+  }
 
-  return (
+  const removeItem = (index:number) => {
+    setItems(items.filter((_,i)=> i !==index))
+  }
+
+  const handleSubmit = () => {
+    router.push({
+      pathname:'/login',
+      params:{items: JSON.stringify(items)}
+    });
+  }
+
+  return(
     <View style={styles.container}>
-      <Image
-        style={styles.logo}
-        source={require('../../assets/images/icon.png')}
-      />
-      <Text variant="h5" style={styles.title}>
-        My App
-      </Text>
+      <TextInput value={item} onChangeText={setItem} style={styles.input} placeholder='Enter Item Name'/>
+      <Pressable onPress={addItem} style={styles.button}>
+        <Text style={styles.buttonText}>Add Item</Text>
+      </Pressable>
+
+
+      <FlatList data={items} keyExtractor={(_,index) => index.toString()} 
+        renderItem={
+          ({item, index})=>(
+            <ItemRow text={item} onRemove={() => removeItem(index)}/>
+          )
+        } />
+
+        <Pressable onPress={handleSubmit} style={styles.button}>
+          <Text style={styles.buttonText}>View Summary</Text>
+        </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#6200EE', // Material default primary purple
-    justifyContent: 'center',
-    alignItems: 'center',
+  container:{
+    flex:1, padding:16, paddingTop:70, backgroundColor:'white'
   },
-  logo: {
-    width: 120,
-    height: 120,
-    marginBottom: 16,
+  input:{
+    borderWidth:1, borderColor:'#ccc', borderRadius:10, padding:10, margin:10
   },
-  title: {
-    color: '#fff',
+  button:{
+    backgroundColor:'#000', padding:15, borderRadius:10, alignItems:'center', margin:5
   },
+  buttonText:{
+    color:'white', fontWeight:'bold'
+  },
+  row:{
+    flexDirection:'row', justifyContent:'space-between', alignItems:'center'
+  },
+  rowText:{
+    flex:1
+  },
+  removeText:{
+    color:'red', fontWeight:'bold'
+  }
 });
